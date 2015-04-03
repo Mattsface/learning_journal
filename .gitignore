@@ -1,0 +1,4 @@
+*.pyc
+*.egg-info
+*.sqlite
+.DS_Store
