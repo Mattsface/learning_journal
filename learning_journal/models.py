@@ -3,6 +3,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Text,
+    DateTime,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,6 +14,8 @@ from sqlalchemy.orm import (
     )
 
 from zope.sqlalchemy import ZopeTransactionExtension
+
+import datetime
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
@@ -29,7 +32,10 @@ class Entry(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Text, length=255, convert_unicode=True, unique=True)
     body = Column(Text, length=None, convert_unicode=True)
-    
+    created = Column(DateTime, default=func.now())
+    edited = Column(DateTime, onupdate=func.utc_timestamp())
+
+
 
 
 
