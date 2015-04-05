@@ -35,7 +35,7 @@ class Entry(Base):
     title = Column(Text(length=255, convert_unicode=True), unique=True, nullable=False)
     body = Column(Text(length=None, convert_unicode=True))
     created = Column(DateTime, default=func.now())
-    edited = Column(DateTime, onupdate=func.utc_timestamp())
+    edited = Column(DateTime, default=func.now(), onupdate=func.utc_timestamp())
 
 
 
