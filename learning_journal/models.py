@@ -4,6 +4,8 @@ from sqlalchemy import (
     Integer,
     Text,
     DateTime,
+    Unicode,
+    UnicodeText,
     func
     )
 
@@ -36,10 +38,14 @@ class Entry(Base):
     edited = Column(DateTime, default=func.now(), onupdate=func.utc_timestamp())
 
     @classmethod
-    def by_id(cls, entryid):
-        return DBSession.query(Entry).filter(Entry.id==entryid).first()
+    def by_id(cls, entryid, session=None):
+        if not session:
+            session = DBSession
+        return session.query(cls).filter(cls.id==entryid).first()
 
-
+    @classmethod
+    def all(cls, session=None):
+        pass
 
 
 Index('my_index', MyModel.name, unique=True, mysql_length=255)

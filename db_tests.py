@@ -23,9 +23,9 @@ print session.query(MyModel).all()
 #entry2 = Entry(title='Second', body='Some text and stuff')
 #session.add(entry1)
 #session.add(entry2)
-#session.commit()
+#session.comm
 
-Entry.by_id(2)
+print Entry().by_id(2, session)
 
 
 
