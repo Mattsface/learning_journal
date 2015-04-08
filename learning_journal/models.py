@@ -32,8 +32,8 @@ class MyModel(Base):
 class Entry(Base):
     __tablename__ = 'entries'
     id = Column(Integer, primary_key=True)
-    title = Column(Text(length=255, convert_unicode=True), unique=True, nullable=False)
-    body = Column(Text(length=None, convert_unicode=True))
+    title = Column(Unicode(length=255), unique=True, nullable=False)
+    body = Column(UnicodeText())
     created = Column(DateTime, default=func.now())
     edited = Column(DateTime, default=func.now(), onupdate=func.utc_timestamp())
 
