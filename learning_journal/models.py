@@ -16,8 +16,6 @@ from sqlalchemy.orm import (
 
 from zope.sqlalchemy import ZopeTransactionExtension
 
-from datetime import datetime
-
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
@@ -37,6 +35,9 @@ class Entry(Base):
     created = Column(DateTime, default=func.now())
     edited = Column(DateTime, default=func.now(), onupdate=func.utc_timestamp())
 
+    @classmethod
+    def by_id(cls, entryid):
+        return Session.query(Entry).filter(Entry.id==entryid).first()
 
 
 
