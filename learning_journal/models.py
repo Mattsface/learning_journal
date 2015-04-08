@@ -37,7 +37,7 @@ class Entry(Base):
 
     @classmethod
     def by_id(cls, entryid):
-        return Session.query(Entry).filter(Entry.id==entryid).first()
+        return DBSession.query(Entry).filter(Entry.id==entryid).first()
 
 
 
