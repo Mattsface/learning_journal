@@ -35,7 +35,7 @@ class Entry(Base):
     title = Column(Unicode(length=255), unique=True, nullable=False)
     body = Column(UnicodeText())
     created = Column(DateTime, default=func.now())
-    edited = Column(DateTime, default=func.now(), onupdate=func.utc_timestamp())
+    edited = Column(DateTime, default=func.now(), onupdate=func.now())
 
     @classmethod
     def by_id(cls, entryid, session=None):
