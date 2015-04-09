@@ -39,7 +39,7 @@ class Entry(Base):
 
     @classmethod
     def by_id(cls, entryid, session=None):
-        if not session:
+        if session is None:
             session = DBSession
         return session.query(cls).filter(cls.id==entryid).first()
 
