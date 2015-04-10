@@ -33,7 +33,7 @@ class Entry(Base):
     __tablename__ = 'entries'
     id = Column(Integer, primary_key=True)
     title = Column(Unicode(length=255), unique=True, nullable=False)
-    body = Column(UnicodeText())
+    body = Column(UnicodeText(), default=u'')
     created = Column(DateTime, default=func.now())
     edited = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -45,7 +45,9 @@ class Entry(Base):
 
     @classmethod
     def all(cls, session=None):
-        pass
+        if session is None:
+            session = DBSession
+        return session.query(cls).order_by(sa.desc(cls.created)).all()
 
 
 Index('my_index', MyModel.name, unique=True, mysql_length=255)
