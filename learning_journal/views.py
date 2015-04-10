@@ -9,13 +9,31 @@ from .models import (
     )
 
 
-@view_config(route_name='home', renderer='templates/mytemplate.pt')
-def my_view(request):
-    try:
-        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'learning_journal'}
+#@view_config(route_name='home', renderer='templates/mytemplate.pt')
+#def my_view(request):
+#    try:
+#        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
+#    except DBAPIError:
+#        return Response(conn_err_msg, content_type='text/plain', status_int=500)
+#    return {'one': one, 'project': 'learning_journal'}
+
+
+@view_config(route_name='home', renderer='string')
+def index_page(request):
+    return 'list page'
+
+@view_config(route_name='detail', renderer='string')
+def view(request):
+    return 'detail page'
+
+@view_config(route_name='action', match_param='action=create', renderer='string')
+def create(request):
+    return 'create page'
+
+@view_config(route_name='action', match_param='action=edit', renderer='string')
+def update(request):
+    return 'edit page'
+
 
 
 conn_err_msg = """\
