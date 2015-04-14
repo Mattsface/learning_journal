@@ -25,14 +25,13 @@ def index_page(request):
     entries = Entry.all()
     return {'entries': entries}
 
-@view_config(route_name='detail', renderer='string')
+@view_config(route_name='detail', renderer='templates/detail.jinja2')
 def view(request):
     this_id = request.matchdict.get('id', -1)
     entry = Entry.by_id(this_id)
     if not entry:
         return HTTPNotFound()
     return {'entry': entry}
-
 
 @view_config(route_name='action', match_param='action=create', renderer='string')
 def create(request):
