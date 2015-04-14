@@ -1,3 +1,4 @@
+from pyramid.httpexpections import HTTPNotFound
 from pyramid.response import Response
 from pyramid.view import view_config
 
@@ -6,6 +7,7 @@ from sqlalchemy.exc import DBAPIError
 from .models import (
     DBSession,
     MyModel,
+    Entry,
     )
 
 
@@ -20,11 +22,17 @@ from .models import (
 
 @view_config(route_name='home', renderer='string')
 def index_page(request):
-    return 'list page'
+    entries = Entry.all()
+    return {'entries': entries}
 
 @view_config(route_name='detail', renderer='string')
 def view(request):
-    return 'detail page'
+    this_id = request.matchdict.get('id', -1)
+    entry = Entry.by_id(this_id)
+    if not entry:
+        return HTTPNotFound()
+    return {'entry': entry}
+
 
 @view_config(route_name='action', match_param='action=create', renderer='string')
 def create(request):
