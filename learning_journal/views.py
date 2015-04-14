@@ -1,4 +1,4 @@
-from pyramid.httpexpections import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.response import Response
 from pyramid.view import view_config
 
