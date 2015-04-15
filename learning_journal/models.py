@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import (
     Column,
     Index,
@@ -35,17 +36,23 @@ class Entry(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Unicode(length=255), unique=True, nullable=False)
     body = Column(UnicodeText(), default=u'')
-    created = Column(DateTime, default=func.now())
-    edited = Column(DateTime, default=func.now(), onupdate=func.now())
+    created = Column(DateTime, default=datetime.datetime.utcnow)
+    edited = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
     @classmethod
     def by_id(cls, entryid, session=None):
+        """
+        return entry an entry based on its index id, if not found return None
+        """
         if session is None:
             session = DBSession
         return session.query(cls).filter(cls.id==entryid).first()
 
     @classmethod
     def all(cls, session=None):
+        """
+        Return all entries by creation date
+        """
         if session is None:
             session = DBSession
         return session.query(cls).order_by(sa.desc(cls.created)).all()

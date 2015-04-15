@@ -20,7 +20,7 @@ from .models import (
 #    return {'one': one, 'project': 'learning_journal'}
 
 
-@view_config(route_name='home', renderer='string')
+@view_config(route_name='home', renderer='templates/list.jinja2')
 def index_page(request):
     entries = Entry.all()
     return {'entries': entries}

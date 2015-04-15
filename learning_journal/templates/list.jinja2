@@ -1,0 +1,13 @@
+{% extends "layout.jija2" %}
+{% block body %}
+<ul>
+    {% for entry in entries %}
+        <li>
+            <a href="{{ request.route_url('detail', id=entry.id) }}">{{ entry.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>This journal is empty</p>
+{% endif %}
+{% endblock %}
