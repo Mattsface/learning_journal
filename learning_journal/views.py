@@ -3,7 +3,9 @@ from pyramid.httpexceptions import HTTPFound
 from .forms import EntryCreateForm, EntryEditForm
 from pyramid.response import Response
 from pyramid.view import view_config
-
+from pyramid.security import forget, remember
+from .forms import LoginForm
+from .models import User
 from sqlalchemy.exc import DBAPIError
 
 from .models import (
@@ -12,14 +14,6 @@ from .models import (
     Entry,
     )
 
-
-#@view_config(route_name='home', renderer='templates/mytemplate.pt')
-#def my_view(request):
-#    try:
-#        one = DBSession.query(MyModel).filter(MyModel.name == 'one').first()
-#    except DBAPIError:
-#        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-#    return {'one': one, 'project': 'learning_journal'}
 
 
 @view_config(route_name='home', renderer='templates/list.jinja2')
@@ -35,7 +29,17 @@ def view(request):
         return HTTPNotFound()
     return {'entry': entry}
 
-@view_config(route_name='action', match_param='action=create', renderer='templates/edit.jinja2')
+
+@view_config(route_name='auth', match_param='action=in', renderer='string', request_method='POST')
+def sign_in(request):
+    login_form = None
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+    if login_form and login_form.validate():
+        user = User.by_name_and_hash(login_form.username.data, login_form.username.password)
+        ### need to make this work
+
+@view_config(route_name='action', match_param='action=create', renderer='templates/edit.jinja2', permission='create')
 def create(request):
     entry = Entry()
     form = EntryCreateForm(request.POST)

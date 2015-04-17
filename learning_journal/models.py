@@ -19,6 +19,7 @@ from sqlalchemy.orm import (
     )
 
 from zope.sqlalchemy import ZopeTransactionExtension
+from cryptacular.bcrypt import BCRYPTPasswordManager as Manager
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
@@ -62,15 +63,20 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(Unicode(length=255), unique=True, nullable=False)
-    password = Column(Unicode(), nullable=True)
+    hashed_password = Column(Unicode(), nullable=True)
+
+    def verify_password(self, password):
+        manager = Manager()
+        return manager.check(self.password, password)
+
     @classmethod
-    def by_user(cls, username, session=None):
+    def by_name_and_hash(cls, username, hashed_password, session=None):
         """
         return entry an entry based on its index id, if not found return None
         """
         if session is None:
             session = DBSession
-        return session.query(cls).filter(cls.username==username).first()
+        return session.query(cls).filter(cls.username==username and cls.hashed_password==hashed_password).first()
 
 
 

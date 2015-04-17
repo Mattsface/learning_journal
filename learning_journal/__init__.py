@@ -1,10 +1,14 @@
 from pyramid.config import Configurator
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from .security import ACLFactory
 from sqlalchemy import engine_from_config
 from .models import (
     DBSession,
     Base,
     )
 import os
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -15,11 +19,17 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
-    config = Configurator(settings=settings)
+    config = Configurator(
+        settings=settings,
+        authentication_policy=AuthTktAuthenticationPolicy('somesecret'),
+        authorization_policy=ACLAuthorizationPolicy(),
+        default_permission='view'
+    )
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
-    config.add_route('home', '/')
-    config.add_route('detail', '/journal/{id:\d+}')
-    config.add_route('action', '/journal/{action}')
+    config.add_route('home', '/', factory=ACLFactory)
+    config.add_route('detail', '/journal/{id:\d+}', factory=ACLFactory)
+    config.add_route('action', '/journal/{action}', factory=ACLFactory)
+    config.add_route('auth', '/sign/{action}', factory=ACLFactory)
     config.scan()
     return config.make_wsgi_app()
