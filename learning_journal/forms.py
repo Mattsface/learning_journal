@@ -12,6 +12,10 @@ class EntryCreateForm(Form):
         [validators.Length(min=1)],
         filters=[strip_filter])
 
+class EntryEditForm(EntryCreateForm):
+    pass
+
+
 class LoginForm(Form):
     username = TextField(
         'Username',  [validators.Length(min=1, max=255)]
@@ -20,5 +24,3 @@ class LoginForm(Form):
         'Password', [validators.Length(min=1, max=255)]
     )
 
-class EntryEditForm(EntryCreateForm):
-    pass

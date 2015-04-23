@@ -69,14 +69,26 @@ class User(Base):
         manager = Manager()
         return manager.check(self.password, password)
 
+
     @classmethod
-    def by_name_and_hash(cls, username, hashed_password, session=None):
+    def by_name(cls, username, session=None):
         """
-        return entry an entry based on its index id, if not found return None
+        Return a User object based on matching username
         """
+
         if session is None:
             session = DBSession
-        return session.query(cls).filter(cls.username==username and cls.hashed_password==hashed_password).first()
+        return session.query(cls).filter(cls.username == username).first()
+
+    # commenting this out
+    #@classmethod
+    #def by_name_and_hash(cls, username, hashed_password, session=None):
+    #    """
+    #    return entry an entry based on its index id, if not found return None
+    #    """
+    #    if session is None:
+    #        session = DBSession
+    #    return session.query(cls).filter(cls.username==username and cls.hashed_password==hashed_password).first()
 
 
 
