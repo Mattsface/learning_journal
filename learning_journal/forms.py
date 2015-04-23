@@ -20,7 +20,7 @@ class LoginForm(Form):
     username = TextField(
         'Username',  [validators.Length(min=1, max=255)]
     )
-    password = PasswordField(
+    hashed_password = PasswordField(
         'Password', [validators.Length(min=1, max=255)]
     )
 

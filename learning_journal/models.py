@@ -67,7 +67,7 @@ class User(Base):
 
     def verify_password(self, password):
         manager = Manager()
-        return manager.check(self.password, password)
+        return manager.check(self.hashed_password, password)
 
 
     @classmethod

@@ -41,7 +41,7 @@ def sign_in(request):
         login_form = LoginForm(request.POST)
     if login_form and login_form.validate():
         user = User.by_name(login_form.username.data)
-        if user and user.verify_password(login_form.password.data):
+        if user and user.verify_password(login_form.hashed_password.data):
             headers = remember(request, user.username)
         else:
             headers = forget(request)
